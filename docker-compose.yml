@@ -1,0 +1,40 @@
+services:
+
+  mongo:
+    image: mongo:6
+    container_name: mern-mongo
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - mern-network
+
+  server:
+    build:
+      context: ./server
+    container_name: mern-server
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    networks:
+      - mern-network
+
+  client:
+    build:
+      context: ./client
+    container_name: mern-client
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - mern-network
+
+volumes:
+  mongo-data:
+
+networks:
+  mern-network:

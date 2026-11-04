@@ -1,33 +1,27 @@
 services:
-
   mongo:
     image: mongo:6
-    container_name: mern-mongo
-    restart: always
+    restart: unless-stopped
     volumes:
       - mongo-data:/data/db
     networks:
       - mern-network
 
   server:
-    build:
-      context: ./server
-    container_name: mern-server
-    restart: always
-    ports:
-      - "5000:5000"
+    build: ./server
+    restart: unless-stopped
+    environment:
+      MONGO_URL: mongodb://mongo:27017/movies
     depends_on:
       - mongo
     networks:
       - mern-network
 
   client:
-    build:
-      context: ./client
-    container_name: mern-client
-    restart: always
+    build: ./client
+    restart: unless-stopped
     ports:
-      - "80:80"
+      - "3000:80"
     depends_on:
       - server
     networks:

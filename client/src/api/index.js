@@ -1,7 +1,8 @@
 import axios from 'axios'
 
+// Relative URL: nginx in the client container forwards /api to the server container
 const api = axios.create({
-    baseURL: 'http://15.135.80.6:5000/api',
+    baseURL: '/api',
 })
 
 export const insertMovie = payload => api.post(`/movie`, payload)
